@@ -1,6 +1,8 @@
 // Error[1]: What if the same question appers => (Solved)
-// Error[2]: How we will make more than question in the same test 
-// Error[3]: Fix the changeQ function on line (49) to change the answer lines like the question.
+// Error[2]: How we will make more than question in the same test (Solved)
+// Error[3]: Fix the changeQ function on line (49) to change the answer lines like the question = > (Solved)
+// Error[4]: num doesn't return to be zero when the question changes => (Solved)
+// Error[5]: arr in line 135, doesn't return to be empty when the question changes (Solved)
 
 let sec = document.getElementById("sec")
 let cube = document.querySelectorAll(".cube")
@@ -12,12 +14,17 @@ let duration = document.querySelector(".timer span")
 duration.innerHTML = 30
 
 
+
 let questions = ["ما هي عاصمة مصر؟",
 "ما هو اقرب كوكب الى الشمس؟", "ما هو اطول برج في العالم؟",
 "ما هو الكوكب الاشد حرارة في المجموعة الشمسية؟", "اين تقع اليابان؟", "ما هو اسم مبرمج هذه اللعبة؟",
 "ما هي عاصمة فلسطين؟"]
 let answers = ["القاهرة", "عطارد", "خليفة", "الزهرة", "اسيا", "محمد", "القدس"]
-let Q_A_num = Math.floor(Math.random() * questions.length)
+
+// let questions = ["ما اسم مبرمج اللعبة؟", "ما هي بلد مبرمج اللعبة؟", "ما هي وظيفة مبرمج اللعبة؟"]
+// let answers = ["محمد", "مصر", "مبرمج"]
+
+
 
 
 
@@ -33,33 +40,58 @@ function shufflingArray(){
         newArray[i] = newArray[n]
         newArray[n] = snum
     }
-    console.log(newArray)
+    return newArray
 }
+shufflingArray() //Call back the function to get the shuffled array
+
+
+
+
+
+// Generator function to get every number in newArray
+function* gen(){
+    for(let i = 0; i < newArray.length; i++){
+        yield newArray[i]
+    }
+}
+let generator = gen() 
+let Q_A_num = generator.next().value
 
 
 Q.innerHTML = questions[Q_A_num]
-
+// Creating lines for the length of every answer
 for(let i = 0; i < answers[Q_A_num].length; i++){
     let div = document.createElement("div")
     div.classList.add("line")
     lines.append(div)
 }
 
+
+// Counter
+let num = 0
+var arr = []
 let line = document.querySelectorAll(".lines .line")
-
-let cou = 0
+// Change question and answer function
+let cou = 1
 function changeQ(){
-    Q.innerHTML = questions[newArray[cou]]
-
-for(let i = 0; i < answers[Q_A_num].length; i++){
-    let div = document.createElement("div")
-    div.classList.add("line")
-    lines.append(div)
+    arr = []
+    let lines2 = document.createElement("div")
+    Q_A_num = generator.next().value
+    Q.innerHTML = questions[Q_A_num]
+    for(let i = 0; i < answers[Q_A_num].length; i++){
+        let div = document.createElement("div")
+        div.classList.add("line")
+        arr.push(div)
+        lines2.append(div)
+    }
+    cou += 1
+    lines2.classList.add("lines")
+    document.querySelector(".test").replaceChildren(lines2)
+    console.log(cou)
+    num = 0
+    console.log(arr)
+    console.log("#".repeat(20))
 }
-cou += 1
-}
-
-
 
 
 
@@ -86,10 +118,9 @@ function Appering(id){
     }, 1500)
 }
 
-// Counter
-let num = 0
 
-let count = setInterval(timer, 1000)
+
+// let count = setInterval(timer, 1000)
 
 // Right cube choosen
 cube.forEach(function(e){
@@ -100,16 +131,19 @@ cube.forEach(function(e){
             // Winning
             if(num === answers[Q_A_num].length - 1){
                 document.getElementById("win").play()
-                setTimeout(() =>{
-                    Disappering(sec)
-                }, 1000)
-                setTimeout(() =>{
-                    Appering(msg)
-                }, 2000)
+                // Check if all questions finished
+                if(cou === questions.length){
+                    setTimeout(() =>{
+                        Disappering(sec)
+                    }, 1000)
+                    setTimeout(() =>{
+                        Appering(msg)
+                    }, 2000)
+                // Check if all questions not finished
+                } else{
+                    setTimeout(() => changeQ(), 1000)
+                }
             }
-            
-            // Empty array for save lines
-            let arr = []
             // If words = answer length
             if(num === answers[Q_A_num].length){
                 document.getElementById("win").play()
@@ -178,3 +212,4 @@ function timer(){
         }, 1500)
     }
 }
+

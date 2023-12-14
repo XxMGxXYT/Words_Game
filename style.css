@@ -172,26 +172,37 @@ section .question{
 }
 
 
-
-
-
-@media (max-width: 992px) {
-    .cubes .cube{
-        width: 75px;
-        height: 75px;
-        font-size: 28px
+@media (min-width: 1200px) {
+    .question h1{
+        font-size: 35px;
     }
 }
 
-@media (max-width: 768px) {
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    .cubes .cube{
+        width: 75px;
+        height: 75px;
+        font-size: 25px
+    }
+    .question h1{
+        font-size: 25px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 993px) {
     .cubes .cube{
         width: 50px;
         height: 50px;
         font-size: 25px;
     }
+
+    .question h1{
+        font-size: 20px;
+    }
 }
 
-@media (max-width: 310px){
+@media (min-width: 310px) and (max-width: 769px){
         /* Cubes */
         .cubes .cube{
             width: 30px;
