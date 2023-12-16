@@ -2,7 +2,9 @@
 // Error[2]: How we will make more than question in the same test (Solved)
 // Error[3]: Fix the changeQ function on line (49) to change the answer lines like the question = > (Solved)
 // Error[4]: num doesn't return to be zero when the question changes => (Solved)
-// Error[5]: arr in line 135, doesn't return to be empty when the question changes (Solved)
+// Error[5]: arr in line 135, doesn't return to be empty when the question changes => (Solved)
+// Error[6]: Bug in correct words, exaclty in the last word in the answer, line 160 => (Solved)
+// Error[7]: num has to be used in indexing only => (Solved)
 
 let sec = document.getElementById("sec")
 let cube = document.querySelectorAll(".cube")
@@ -67,14 +69,18 @@ for(let i = 0; i < answers[Q_A_num].length; i++){
 }
 
 
+
 // Counter
 let num = 0
+let num2 = 0
 var arr = []
+var arr2 = []
 let line = document.querySelectorAll(".lines .line")
 // Change question and answer function
 let cou = 1
 function changeQ(){
     arr = []
+    arr2 = []
     let lines2 = document.createElement("div")
     Q_A_num = generator.next().value
     Q.innerHTML = questions[Q_A_num]
@@ -89,8 +95,10 @@ function changeQ(){
     document.querySelector(".test").replaceChildren(lines2)
     console.log(cou)
     num = 0
-    console.log(arr)
-    console.log("#".repeat(20))
+    num2 = 0
+    for(let i = 0; i < answers[Q_A_num].length; i++){
+        arr2.push(answers[Q_A_num][i])
+    }
 }
 
 
@@ -118,8 +126,16 @@ function Appering(id){
     }, 1500)
 }
 
-
-
+let one = true
+function once(){
+    if(one){
+        for(let i = 0; i < answers[Q_A_num].length; i++){
+            arr2.push(answers[Q_A_num][i])
+        }
+        return one = false
+    }
+}
+once()
 // let count = setInterval(timer, 1000)
 
 // Right cube choosen
@@ -128,8 +144,12 @@ cube.forEach(function(e){
     e.addEventListener("click", () =>{
         // If answer's words clicked
         if(answers[Q_A_num].includes(e.innerHTML)){
+            // check index (num) in arr2 = index (num) in the answer, and index (num) in arr2 = user cube choise
+            if(arr2[num] === answers[Q_A_num][num] && arr2[num] === e.innerHTML){
+                num2 += 1
+            }
             // Winning
-            if(num === answers[Q_A_num].length - 1){
+            if(num2 === answers[Q_A_num].length){
                 document.getElementById("win").play()
                 // Check if all questions finished
                 if(cou === questions.length){
@@ -154,29 +174,28 @@ cube.forEach(function(e){
                 line.forEach((l) =>{
                     arr.push(l)
                 })
-                // Add the word to the line div
-                arr[num].innerHTML = e.innerHTML
-                // Check if the word in it's right position
-            if(arr[num].innerHTML === answers[Q_A_num][num]){
-                num += 1
-                // Adding green color to the cube
-                e.classList.add("greenShadow")
-                // Removing green color of the cube after 700 mill Seconds
-                setTimeout(() =>{
-                    e.classList.remove("greenShadow")
-                }, 700)
-                document.getElementById("correct").play()
-                return false
-            }else{
-                // Adding red color to the cube
-                e.classList.add("redShadow")
-                // Removing red color of the cube after 700 mill Seconds
-                setTimeout(() =>{
-                    e.classList.remove("redShadow")
-                }, 700)
-                document.getElementById("boo").play()
-                return false
-            }
+                // check index (num) in arr2 = index (num) in the answer, and index (num) in arr2 = user cube choise
+                if(arr2[num] === answers[Q_A_num][num] && arr2[num] === e.innerHTML){
+                    // Add the word to the line div
+                    arr[num].innerHTML = e.innerHTML
+                    num += 1
+                    // Adding green color to the cube
+                    e.classList.add("greenShadow")
+                    // Removing green color of the cube after 700 mill Seconds
+                    setTimeout(() =>{
+                        e.classList.remove("greenShadow")
+                    }, 700)
+                    document.getElementById("correct").play()
+                    return false
+                }else{
+                    // Adding red color to the cube
+                    e.classList.add("redShadow")
+                    // Removing red color of the cube after 700 mill Seconds
+                    setTimeout(() =>{
+                        e.classList.remove("redShadow")
+                    }, 700)
+                    document.getElementById("boo").play()
+                }
             }
         } else{
             // Adding red color to the cube
@@ -189,7 +208,6 @@ cube.forEach(function(e){
         }
     })
 })
-
 
 
 // Timer
