@@ -5,6 +5,8 @@
 // Error[5]: arr in line 135, doesn't return to be empty when the question changes => (Solved)
 // Error[6]: Bug in correct words, exaclty in the last word in the answer, line 160 => (Solved)
 // Error[7]: num has to be used in indexing only => (Solved)
+// [1] if user wrong answers = correct answers => (Not Finished)
+// [2] if user wrong answers = correct answers => (Not Finished)
 
 let sec = document.getElementById("sec")
 let cube = document.querySelectorAll(".cube")
@@ -13,7 +15,8 @@ let lines = document.querySelector(".lines")
 let msg = document.getElementById("msg")
 let game_over = document.getElementById("gameOver")
 let duration = document.querySelector(".timer span")
-duration.innerHTML = 30
+let durationTime = 30
+duration.innerHTML = durationTime
 
 
 
@@ -69,15 +72,17 @@ for(let i = 0; i < answers[Q_A_num].length; i++){
 }
 
 
-
-// Counter
+// Counters
 let num = 0
 let num2 = 0
+let numOfCorrectAnswers = 0
+let numOfWrongAnswers = 0
+let cou = 1
+// Empty arrays
 var arr = []
 var arr2 = []
 let line = document.querySelectorAll(".lines .line")
 // Change question and answer function
-let cou = 1
 function changeQ(){
     arr = []
     arr2 = []
@@ -93,14 +98,40 @@ function changeQ(){
     cou += 1
     lines2.classList.add("lines")
     document.querySelector(".test").replaceChildren(lines2)
-    console.log(cou)
+    console.log(`The number of quetions: ${cou}`)
     num = 0
     num2 = 0
+    duration.innerHTML = durationTime + 1
     for(let i = 0; i < answers[Q_A_num].length; i++){
         arr2.push(answers[Q_A_num][i])
     }
+    if(cou === questions.length){
+        durationTime -= 1
+        TimerOneTime()
+        setTimeout(() =>{
+            if(numOfWrongAnswers > numOfCorrectAnswers){
+                document.getElementById("boo").play()
+                setTimeout(() =>{
+                    Disappering(sec)
+                }, 1000)
+                setTimeout(() =>{
+                    Appering(game_over)
+                }, 2000)
+            } else if (numOfCorrectAnswers > numOfWrongAnswers){
+                setTimeout(() =>{
+                    Disappering(sec)
+                }, 1000)
+                setTimeout(() =>{
+                    Appering(msg)
+                }, 2000)
+            }
+            return false
+        }, (durationTime + 1) * 1000)
+    } else{
+        Timer()
+    }
 }
-
+Timer()
 
 
 
@@ -126,6 +157,7 @@ function Appering(id){
     }, 1500)
 }
 
+// One time using functions
 let one = true
 function once(){
     if(one){
@@ -136,9 +168,17 @@ function once(){
     }
 }
 once()
-// let count = setInterval(timer, 1000)
+// Not Used yet
+let two = true
+function twice(){
+    if(two){
+        changeQ()
+        return one = false
+    }
+}
 
-// Right cube choosen
+
+// Cubes
 cube.forEach(function(e){
     // Adding click event for each cube
     e.addEventListener("click", () =>{
@@ -150,6 +190,8 @@ cube.forEach(function(e){
             }
             // Winning
             if(num2 === answers[Q_A_num].length){
+                numOfCorrectAnswers += 1
+                console.log(`Correct answers = ${numOfCorrectAnswers}`)
                 document.getElementById("win").play()
                 // Check if all questions finished
                 if(cou === questions.length){
@@ -209,18 +251,45 @@ cube.forEach(function(e){
     })
 })
 
+// Timer function
+function Timer(){
+    // Decrease duration time
+    duration.innerHTML -= 1
+    // if duration time = 0, and player not answerd the question
+    if(duration.innerHTML > "0" && num2 !== answers[Q_A_num].length){
+        setTimeout(() => Timer(), 1000)
+    } 
+    // if player answerd the question
+    else if(num2 === answers[Q_A_num].length){
+        return false
+    } 
+    // if duration time finished and = 0
+    else if(duration.innerHTML === "0"){
+        numOfWrongAnswers += 1
+        console.log(`Wrong answers = ${numOfWrongAnswers}`)
+        if(cou !== questions.length){
+            document.getElementById("boo").play()
+            setTimeout(() => changeQ(), 1000)
+        }
+        return false
+    }
+}
 
-// Timer
-function timer(){
-    duration.innerHTML -= 1 
-    if(duration.innerHTML === "10"){
-        document.querySelector(".timer").style.color = "red"
-    }
-    if(num === answers[Q_A_num].length){
-        clearInterval(count)
-    }
-    if(duration.innerHTML === "0"){
-        clearInterval(count)
+function TimerOneTime(){
+    // Decrease duration time
+    duration.innerHTML -= 1
+    // if duration time = 0, and player not answerd the question
+    if(duration.innerHTML > "0" && num2 !== answers[Q_A_num].length){
+        setTimeout(() => Timer(), 1000)
+    } 
+    // if player answerd the question
+    if(num2 === answers[Q_A_num].length){
+        return false
+    } 
+    // if duration time finished and = 0
+    else if(duration.innerHTML === "0"){
+        numOfWrongAnswers += 1
+        console.log(`Wrong answers = ${numOfWrongAnswers}`)
         document.getElementById("boo").play()
         setTimeout(() =>{
             Disappering(sec)
@@ -228,6 +297,6 @@ function timer(){
         setTimeout(() =>{
             Appering(game_over)
         }, 1500)
+        return false
     }
 }
-
