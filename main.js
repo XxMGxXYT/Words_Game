@@ -15,16 +15,17 @@ let lines = document.querySelector(".lines")
 let msg = document.getElementById("msg")
 let game_over = document.getElementById("gameOver")
 let duration = document.querySelector(".timer span")
-let durationTime = 30
+let durationTime = 60
 duration.innerHTML = durationTime
 
 
 
 let questions = ["ما هي عاصمة مصر؟",
 "ما هو اقرب كوكب الى الشمس؟", "ما هو اطول برج في العالم؟",
-"ما هو الكوكب الاشد حرارة في المجموعة الشمسية؟", "اين تقع اليابان؟", "ما هو اسم مبرمج هذه اللعبة؟",
-"ما هي عاصمة فلسطين؟"]
-let answers = ["القاهرة", "عطارد", "خليفة", "الزهرة", "اسيا", "محمد", "القدس"]
+"ما هي لغة البرمجة المستخدمة في اللعبة؟", "اين تقع اليابان؟", "ما هو اسم مبرمج هذه اللعبة؟",
+"ما هي عاصمة فلسطين؟", "ما اسم الرسول صلى الله عليه و سلم؟", "ما هو اسرع حيوان في العالم؟", "من مكتشف التيار المتردد؟",
+"ما ترتيب كوكب اورانوس بين كواكب المجموعة الشمسية؟"]
+let answers = ["القاهرة", "عطارد", "خليفة", "جافاسكريبت", "اسيا", "محمد", "القدس", "محمد", "الفهد", "تيسلا", "السابع"]
 
 // let questions = ["ما اسم مبرمج اللعبة؟", "ما هي بلد مبرمج اللعبة؟", "ما هي وظيفة مبرمج اللعبة؟"]
 // let answers = ["محمد", "مصر", "مبرمج"]
@@ -84,50 +85,47 @@ var arr2 = []
 let line = document.querySelectorAll(".lines .line")
 // Change question and answer function
 function changeQ(){
+    // Make all arrays empty
     arr = []
     arr2 = []
+    // create div, and save it in "lines2" variable
     let lines2 = document.createElement("div")
+    // Change Question with Its Answer
     Q_A_num = generator.next().value
     Q.innerHTML = questions[Q_A_num]
+    // Create lines and add it to "lines2" div.
     for(let i = 0; i < answers[Q_A_num].length; i++){
         let div = document.createElement("div")
         div.classList.add("line")
         arr.push(div)
         lines2.append(div)
     }
+    // Increase counter of the every question number 
     cou += 1
+    // Add class "lines" to the new div => "lines2", and replace the old one with this new div. 
     lines2.classList.add("lines")
     document.querySelector(".test").replaceChildren(lines2)
+    // Print the number of the right question
     console.log(`The number of quetions: ${cou}`)
+    // Make all counters empty
     num = 0
     num2 = 0
+    // Add one second to the duration to fix the bug
     duration.innerHTML = durationTime + 1
+    // Make the color of duration span black, after it was red in the condition of "Timer" function
+    duration.style.color = "black"
+    // Make every word of the right answer in empty array, so we can compare it with user word's array 
     for(let i = 0; i < answers[Q_A_num].length; i++){
         arr2.push(answers[Q_A_num][i])
     }
+    // If cou = number of questions, deacress one second of the duration, and call back "TimerOneTime" function
     if(cou === questions.length){
         durationTime -= 1
         TimerOneTime()
-        setTimeout(() =>{
-            if(numOfWrongAnswers > numOfCorrectAnswers){
-                document.getElementById("boo").play()
-                setTimeout(() =>{
-                    Disappering(sec)
-                }, 1000)
-                setTimeout(() =>{
-                    Appering(game_over)
-                }, 2000)
-            } else if (numOfCorrectAnswers > numOfWrongAnswers){
-                setTimeout(() =>{
-                    Disappering(sec)
-                }, 1000)
-                setTimeout(() =>{
-                    Appering(msg)
-                }, 2000)
-            }
-            return false
-        }, (durationTime + 1) * 1000)
-    } else{
+        return false
+    } 
+    // If cou not = number of questions, Call back "Timer" function
+    else{
         Timer()
     }
 }
@@ -177,7 +175,6 @@ function twice(){
     }
 }
 
-
 // Cubes
 cube.forEach(function(e){
     // Adding click event for each cube
@@ -190,6 +187,7 @@ cube.forEach(function(e){
             }
             // Winning
             if(num2 === answers[Q_A_num].length){
+                // Increass correct answers, and print it
                 numOfCorrectAnswers += 1
                 console.log(`Correct answers = ${numOfCorrectAnswers}`)
                 document.getElementById("win").play()
@@ -226,6 +224,12 @@ cube.forEach(function(e){
                     // Removing green color of the cube after 700 mill Seconds
                     setTimeout(() =>{
                         e.classList.remove("greenShadow")
+                    }, 700) //none_click
+                    // Adding none_click event to the cube
+                    e.classList.add("none_click")
+                    // Removing none_click of the cube after 700 mill Seconds
+                    setTimeout(() =>{
+                        e.classList.remove("none_click")
                     }, 700)
                     document.getElementById("correct").play()
                     return false
@@ -236,6 +240,12 @@ cube.forEach(function(e){
                     setTimeout(() =>{
                         e.classList.remove("redShadow")
                     }, 700)
+                    // Adding none_click event to the cube
+                    e.classList.add("none_click")
+                    // Removing none_click of the cube after 700 mill Seconds
+                    setTimeout(() =>{
+                        e.classList.remove("none_click")
+                    }, 700)
                     document.getElementById("boo").play()
                 }
             }
@@ -245,6 +255,12 @@ cube.forEach(function(e){
             // Removing red color of the cube after 700 mill Seconds
             setTimeout(() =>{
                 e.classList.remove("redShadow")
+            }, 700)
+            // Adding none_click event to the cube
+            e.classList.add("none_click")
+            // Removing none_click of the cube after 700 mill Seconds
+            setTimeout(() =>{
+                e.classList.remove("none_click")
             }, 700)
             document.getElementById("boo").play()
         }
@@ -264,7 +280,8 @@ function Timer(){
         return false
     } 
     // if duration time finished and = 0
-    else if(duration.innerHTML === "0"){
+    else if(duration.innerHTML === "0" && num2 !== answers[Q_A_num].length){
+        // Increass wrong answers, and print it
         numOfWrongAnswers += 1
         console.log(`Wrong answers = ${numOfWrongAnswers}`)
         if(cou !== questions.length){
@@ -273,30 +290,47 @@ function Timer(){
         }
         return false
     }
+    if(duration.innerHTML <= "10"){
+        duration.style.color = "red"
+    }
 }
 
+// Last timer function, only one time using for the last question
 function TimerOneTime(){
     // Decrease duration time
     duration.innerHTML -= 1
-    // if duration time = 0, and player not answerd the question
-    if(duration.innerHTML > "0" && num2 !== answers[Q_A_num].length){
-        setTimeout(() => Timer(), 1000)
-    } 
-    // if player answerd the question
-    if(num2 === answers[Q_A_num].length){
-        return false
-    } 
+    // if duration time > 0, and player not answerd the question
+    if(duration.innerHTML > "0"){
+        setTimeout(() => TimerOneTime(), 1000)
+    }
     // if duration time finished and = 0
     else if(duration.innerHTML === "0"){
+        // Increass wrong answers, and print it
         numOfWrongAnswers += 1
         console.log(`Wrong answers = ${numOfWrongAnswers}`)
-        document.getElementById("boo").play()
-        setTimeout(() =>{
-            Disappering(sec)
-        }, 1000)
-        setTimeout(() =>{
-            Appering(game_over)
-        }, 1500)
+        // If wrong answers more than correct answers
+        if(numOfWrongAnswers > numOfCorrectAnswers){
+            document.getElementById("boo").play()
+            setTimeout(() =>{
+                Disappering(sec)
+            }, 1000)
+            setTimeout(() =>{
+                Appering(game_over)
+            }, 2000)
+        } 
+        // If correct answers more than wrong answers
+        else if (numOfCorrectAnswers > numOfWrongAnswers){
+            setTimeout(() =>{
+                Disappering(sec)
+            }, 1000)
+            setTimeout(() =>{
+                Appering(msg)
+            }, 2000)
+        }
+        // If correct and wrong answers equal each other
+        else {
+            alert("Draw")
+        }
         return false
     }
 }
