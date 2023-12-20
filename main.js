@@ -61,7 +61,7 @@ function* gen(){
     }
 }
 let generator = gen() 
-let Q_A_num = 3
+let Q_A_num = generator.next().value
 
 
 Q.innerHTML = questions[Q_A_num]
