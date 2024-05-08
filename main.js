@@ -5,30 +5,48 @@
 // Error[5]: arr in line 135, doesn't return to be empty when the question changes => (Solved)
 // Error[6]: Bug in correct words, exaclty in the last word in the answer, line 160 => (Solved)
 // Error[7]: num has to be used in indexing only => (Solved)
-// [1] if user wrong answers = correct answers => (Not Finished)
-// [2] if user wrong answers = correct answers => (Not Finished)
+// Error[8]: Problem in last question, "TimerOneTime()" => (Solved)
+/* 
+Error [8] explained: 
+(1) in the last question, that uses the "TimerOneTime()", if wrong ansewrs = correct ansewrs,
+and the player answer the last question right, the timer continue untill it increas the wrong ansewrs by one, which
+makes the function consider it as => Draw.
+(2) If wrong answers was more than correct ansewrs by two, and the player ansewred last question right, the timer
+will still be working untll increas the wrong ansewrs by one, which makes the wrong ansewrs (+1) after the game
+finished as a Gameover.
+*/
 
+// [1] Draw => (Not Finished)
+
+// Get all data we need
 let sec = document.getElementById("sec")
 let cube = document.querySelectorAll(".cube")
 let Q = document.querySelector(".question h1")
 let lines = document.querySelector(".lines")
-let msg = document.getElementById("msg")
-let game_over = document.getElementById("gameOver")
+let winMsg = document.getElementById("winMsg")
+let loseMsg = document.getElementById("loseMsg")
 let duration = document.querySelector(".timer span")
+let trueSpan = document.getElementById("true")
+let falseSpan = document.getElementById("false")
+let trueSpan2 = document.getElementById("true2")
+let falseSpan2 = document.getElementById("false2")
 let durationTime = 60
 duration.innerHTML = durationTime
 
-
-
+// The questions
 let questions = ["ما هي عاصمة مصر؟",
 "ما هو اقرب كوكب الى الشمس؟", "ما هو اطول برج في العالم؟",
 "يساوي المسافة * السرعة؟......", "اين تقع اليابان؟", "ما هو اسم مبرمج هذه اللعبة؟",
 "ما هي عاصمة فلسطين؟", "ما اسم الرسول صلى الله عليه و سلم؟", "ما هو اسرع حيوان في العالم؟", "من مكتشف التيار المتردد؟",
 "ما ترتيب كوكب اورانوس بين كواكب المجموعة الشمسية؟"]
+// The ansewrs
 let answers = ["القاهرة", "عطارد", "خليفة", "الزمن", "اسيا", "محمد", "القدس", "محمد", "الفهد", "تيسلا", "السابع"]
 
-// let questions = ["ما اسم مبرمج اللعبة؟", "ما هي بلد مبرمج اللعبة؟", "ما هي وظيفة مبرمج اللعبة؟"]
-// let answers = ["محمد", "مصر", "مبرمج"]
+
+/* Just for testing some festures */
+// let questions = ["ما اسم مبرمج اللعبة؟", "ما هو لون الشمس؟", "ما هي عاصمة فلسطين؟", "ما اسم الكوكب الذي نعيش فيه؟", "ما هي اول سورة في القرآن؟"]
+// let answers = ["محمد", "اصفر", "القدس", "الارض", "الفاتحة"]
+/* Just for testing some festures */
 
 
 
@@ -72,7 +90,7 @@ for(let i = 0; i < answers[Q_A_num].length; i++){
     lines.append(div)
 }
 
-
+var bool = true
 // Counters
 let num = 0
 let num2 = 0
@@ -121,14 +139,15 @@ function changeQ(){
     // If cou = number of questions, deacress one second of the duration, and call back "TimerOneTime" function
     if(cou === questions.length){
         durationTime -= 1
-        TimerOneTime()
-        return false
+        finalQuestionFunction()
     } 
     // If cou not = number of questions, Call back "Timer" function
     else{
         Timer()
     }
 }
+
+// When this fuction calls, the game will starts => This functu
 Timer()
 
 
@@ -189,16 +208,13 @@ cube.forEach(function(e){
             if(num2 === answers[Q_A_num].length){
                 // Increass correct answers, and print it
                 numOfCorrectAnswers += 1
+                trueSpan.innerHTML = numOfCorrectAnswers
+                trueSpan2.innerHTML = numOfCorrectAnswers
                 console.log(`Correct answers = ${numOfCorrectAnswers}`)
-                document.getElementById("win").play()
+                document.getElementById("correct").play()
                 // Check if all questions finished
                 if(cou === questions.length){
-                    setTimeout(() =>{
-                        Disappering(sec)
-                    }, 1000)
-                    setTimeout(() =>{
-                        Appering(msg)
-                    }, 2000)
+                    console.log("Shit")
                 // Check if all questions not finished
                 } else{
                     setTimeout(() => changeQ(), 1000)
@@ -206,7 +222,7 @@ cube.forEach(function(e){
             }
             // If words = answer length
             if(num === answers[Q_A_num].length){
-                document.getElementById("win").play()
+                // document.getElementById("win").play()
                 // Return nothing
                 return false
             // If words not equal answer length
@@ -283,6 +299,7 @@ function Timer(){
     else if(duration.innerHTML === "0" && num2 !== answers[Q_A_num].length){
         // Increass wrong answers, and print it
         numOfWrongAnswers += 1
+        falseSpan.innerHTML = numOfWrongAnswers
         console.log(`Wrong answers = ${numOfWrongAnswers}`)
         if(cou !== questions.length){
             document.getElementById("boo").play()
@@ -296,6 +313,51 @@ function Timer(){
 }
 
 // Last timer function, only one time using for the last question
+function CheckScore(){
+    if(numOfCorrectAnswers > numOfWrongAnswers){
+        Disappering(sec)
+        setTimeout(() => {
+            document.getElementById("correct").play()
+            Appering(winMsg)
+        }, 1000)
+        bool = false
+    } else if(numOfCorrectAnswers < numOfWrongAnswers){
+        falseSpan.innerHTML = numOfWrongAnswers
+        falseSpan2.innerHTML = numOfWrongAnswers
+        Disappering(sec)
+        setTimeout(() => {
+            document.getElementById("boo").play()
+            Appering(loseMsg)
+        }, 1000)
+        bool = false
+    } else{
+        Disappering(sec)
+        setTimeout(() => alert("Draw"), 1000)
+        bool = false
+    }
+}
+function finalQuestionFunction(){
+    if(bool === true){
+        // The time will be red in the last 10 seconds
+        if(duration.innerHTML <= "10"){
+            duration.style.color = "red"
+        }
+        // Decrease duration time
+        duration.innerHTML -= 1
+        // If ansewr is correct
+        if(num2 === answers[Q_A_num].length || duration.innerHTML === "0"){
+            CheckScore()
+        } else{
+            setTimeout(() => {
+                finalQuestionFunction()
+            }, 1000)
+        }
+    }
+}
+
+
+// Not used function
+/*
 function TimerOneTime(){
     // Decrease duration time
     duration.innerHTML -= 1
@@ -307,6 +369,8 @@ function TimerOneTime(){
     else if(duration.innerHTML === "0"){
         // Increass wrong answers, and print it
         numOfWrongAnswers += 1
+        falseSpan.innerHTML = numOfWrongAnswers
+        falseSpan2.innerHTML = numOfWrongAnswers
         console.log(`Wrong answers = ${numOfWrongAnswers}`)
         // If wrong answers more than correct answers
         if(numOfWrongAnswers > numOfCorrectAnswers){
@@ -315,7 +379,7 @@ function TimerOneTime(){
                 Disappering(sec)
             }, 1000)
             setTimeout(() =>{
-                Appering(game_over)
+                Appering(loseMsg)
             }, 2000)
         } 
         // If correct answers more than wrong answers
@@ -324,7 +388,7 @@ function TimerOneTime(){
                 Disappering(sec)
             }, 1000)
             setTimeout(() =>{
-                Appering(msg)
+                Appering(winMsg)
             }, 2000)
         }
         // If correct and wrong answers equal each other
@@ -334,3 +398,4 @@ function TimerOneTime(){
         return false
     }
 }
+*/

@@ -120,66 +120,160 @@ section .question{
 }
 
 .msg{
-    width: 100%;
-    transition: 0.5s;
-    height: 100vh;
     display: flex;
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
 }
 
 .msg .container{
-    margin-top: 100px;
-    color: white;
-    background-color: rgb(0, 228, 0);
+    width: 600px;
+    height: 500px;
+}
+
+.msg .card{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-    height: 50%;
-}
-
-.msg .h1{
-    text-align: center;
-}
-
-.gameOver{
     width: 100%;
-    transition: 0.5s;
-    height: 100vh;
-    display: flex;
-    padding-left: 20px;
-    padding-right: 20px;
+    height: 100%;
+    border-radius: 20px;
 }
 
-.gameOver .container{
-    margin-top: 100px;
+.msg .pic{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.msg .pic img{
+    width: 100%;
+    height: 100%;
+}
+
+.msg h1{
     color: white;
-    background-color: rgb(228, 53, 0);
+    font-weight: bold;
+    background-color: black;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.msg .counters{
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.msg .counters .nums{
+    width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-    height: 50%;
+    gap: 5px;
 }
 
-.gameOver .h1{
-    text-align: center;
+.msg .counters img{
+    width: 50px;
+    height: 50px;
+}
+
+.msg .counters span{
+    font-weight: bold;
+}
+
+.win .card{
+    background-image: linear-gradient(to left bottom, rgb(4, 209, 4), rgb(85 255 85));
+    box-shadow: inset 0 0 4px 4px rgb(85 255 85);
+}
+
+.lose .card{
+    background-image: linear-gradient(to left bottom, rgb(209, 4, 4), rgb(255, 85, 85));
+    box-shadow: inset 0 0 4px 4px rgb(255, 85, 85);
 }
 
 
-@media (min-width: 1200px) {
+
+/* extra Small devices */
+@media (max-width: 499px){
+    .msg .container {
+        width: 300px;
+        height: 260px;
+    }
+    .msg .pic {
+        width: 100px;
+        height: 100px;
+    }
+    .msg h1 {
+        font-size: 20px;
+    }
+    .msg .counters img {
+        width: 30px;
+        height: 30px;
+    }
+    /* Cubes */
+    .cubes .cube{
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+    /* Cubes */
     .question h1{
-        font-size: 35px;
+        font-size: 17px;
+    }
+    .lines .line{
+        width: 20px;
+        font-size: 20px;
+    }
+    .h1 h1{
+        font-size: 20px;
     }
 }
 
+/* Small devices */
+@media (min-width: 500px) and (max-width: 767px){
+    .msg .container {
+        width: 500px;
+        height: 430px;
+    }
+    /* Cubes */
+    .cubes .cube{
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+    /* Cubes */
+    .question h1{
+        font-size: 17px;
+    }
+    .lines .line{
+        width: 20px;
+        font-size: 20px;
+    }
+    .h1 h1{
+        font-size: 20px;
+    }
+}
 
-@media (min-width: 992px) and (max-width: 1200px) {
+/* Medium devices */
+@media (min-width: 768px) and (max-width: 992px){
+    .cubes .cube{
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
+    .question h1{
+        font-size: 20px;
+    }
+}
+
+/* Large devices */
+@media (min-width: 993px) and (max-width: 1999px){ 
     .cubes .cube{
         width: 75px;
         height: 75px;
@@ -190,40 +284,9 @@ section .question{
     }
 }
 
-@media (min-width: 768px) and (max-width: 993px) {
-    .cubes .cube{
-        width: 50px;
-        height: 50px;
-        font-size: 25px;
-    }
-
+/* X-Large devices */
+@media (min-width: 1200px) {
     .question h1{
-        font-size: 20px;
+        font-size: 35px;
     }
-}
-
-@media (min-width: 310px) and (max-width: 769px){
-        /* Cubes */
-        .cubes .cube{
-            width: 30px;
-            height: 30px;
-            font-size: 20px;
-        }
-        /* Cubes */
-        .question h1{
-            font-size: 17px;
-        }
-        .lines .line{
-            width: 20px;
-            font-size: 20px;
-        }
-        .msg .container{
-            height: 30%;
-        }
-        .gameOver .container{
-            height: 30%;
-        }
-        .h1 h1{
-            font-size: 20px;
-        }
 }
