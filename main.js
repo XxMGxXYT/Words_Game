@@ -30,7 +30,7 @@ let trueSpan = document.getElementById("true")
 let falseSpan = document.getElementById("false")
 let trueSpan2 = document.getElementById("true2")
 let falseSpan2 = document.getElementById("false2")
-let durationTime = 60
+let durationTime = 30
 duration.innerHTML = durationTime
 
 // The questions
